@@ -1,0 +1,12 @@
+name = "graintcp-cf"
+main = "GrainTCP.js"
+compatibility_date = "2026-08-01"
+workers_dev = true
+keep_vars = true
+
+[vars]
+PROXYIP = "nrt.proxyip.cmliussss.net:443,proxyip.cmliussss.net:443"
+
+[[routes]]
+pattern = "grain.080933.xyz"
+custom_domain = true
