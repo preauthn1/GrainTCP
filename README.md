@@ -10,6 +10,7 @@
 - WebSocket early data 接入
 - `request.fetcher.connect()` TCP 出站
 - 并发拨号竞争首个成功连接
+- 直连失败后通过 `PROXYIP` 反代入口重连，支持访问 Cloudflare 代理目标
 - 显式关闭 WebSocket 压缩协商
 - 上传侧机会性 grain 合包写入
 - 下载侧复用同一 grain 核，再加下载门控
@@ -315,6 +316,9 @@ Q_ws_out' ≈ R_sock_read - R_ws_drain
 | `upPack` | 上传侧合包目标 | `20 * 1024` |
 | `maxED` | early data 上限 | `8 * 1024` |
 | `concur` | 并发拨号数；Workers / Pages 默认 `4`，Snippets 手动改 `1` | `4` |
+| `PROXYIP` | 直连失败后的反代入口，支持 `host:port` 或逗号分隔列表 | 空 |
+
+`PROXYIP` 保留 GrainTCP 的直连性能路径：普通目标仍然先走并发直连；只有直连建连失败时，才连接反代入口。反代入口负责代替 Worker 连接原目标，因此可覆盖 Cloudflare 对“Worker 直接连接 Cloudflare 代理地址”的限制。
 
 这些值对应的是当前主线路径下的收敛结果，不是随意占位参数。
 
